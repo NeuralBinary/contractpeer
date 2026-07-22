@@ -16,6 +16,26 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://contractpeer.com/blog/</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://contractpeer.com/blog/ai-contract-review-guide.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://contractpeer.com/blog/10-dangerous-clauses.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://contractpeer.com/blog/nda-review-checklist.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>https://contractpeer.com/login.php</loc>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
