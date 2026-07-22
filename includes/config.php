@@ -58,3 +58,4 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/stripe.php';
 require_once __DIR__ . '/llm.php';
 require_once __DIR__ . '/file_processor.php';
+require_once __DIR__ . '/email.php';

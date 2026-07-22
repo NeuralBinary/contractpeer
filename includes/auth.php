@@ -79,6 +79,9 @@ function register_user($email, $password, $name = '') {
     start_session();
     $_SESSION['user_id'] = $user_id;
     
+    // Send welcome email (async - don't block registration)
+    @send_welcome_email($email, $name);
+    
     return ['success' => true, 'user_id' => $user_id];
 }
 
