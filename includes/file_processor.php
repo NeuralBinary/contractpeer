@@ -11,6 +11,7 @@ function extract_text_from_file($filepath, $filename) {
         case 'txt':
             return extract_from_txt($filepath);
         case 'pdf':
+            require_once __DIR__ . '/pdf_extractor.php';
             return extract_from_pdf($filepath);
         case 'docx':
             return extract_from_docx($filepath);
@@ -33,84 +34,8 @@ function extract_from_txt($filepath) {
     return ['text' => $content];
 }
 
-function extract_from_pdf($filepath) {
-    $content = file_get_contents($filepath);
-    if ($content === false) {
-        return ['error' => 'Could not read PDF file'];
-    }
-    
-    $text = '';
-    
-    // Method 1: Extract text between BT and ET markers (PDF text objects)
-    // This is a simplified pure-PHP PDF text extractor
-    if (preg_match_all('/BT\s*(.*?)\s*ET/s', $content, $matches)) {
-        foreach ($matches[1] as $text_block) {
-            // Extract text from Tj and TJ operators
-            if (preg_match_all('/\((.*?)\)\s*Tj/s', $text_block, $tj_matches)) {
-                foreach ($tj_matches[1] as $str) {
-                    $text .= decode_pdf_string($str);
-                }
-            }
-            if (preg_match_all('/\[(.*?)\]\s*TJ/s', $text_block, $tj_matches)) {
-                foreach ($tj_matches[1] as $arr) {
-                    if (preg_match_all('/\((.*?)\)/', $arr, $parts)) {
-                        foreach ($parts[1] as $str) {
-                            $text .= decode_pdf_string($str);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    // Method 2: If no text found with BT/ET, try stream-based extraction
-    if (trim($text) === '') {
-        // Look for text in uncompressed streams
-        if (preg_match_all('/stream\r?\n(.*?)\r?\nendstream/s', $content, $streams)) {
-            foreach ($streams[1] as $stream) {
-                $decoded = @gzuncompress($stream);
-                if ($decoded !== false) {
-                    // Extract text from decoded stream
-                    if (preg_match_all('/\((.*?)\)\s*Tj/', $decoded, $tj)) {
-                        foreach ($tj[1] as $str) {
-                            $text .= decode_pdf_string($str) . ' ';
-                        }
-                    }
-                    if (preg_match_all('/\[(.*?)\]\s*TJ/', $decoded, $tj)) {
-                        foreach ($tj[1] as $arr) {
-                            if (preg_match_all('/\((.*?)\)/', $arr, $parts)) {
-                                foreach ($parts[1] as $str) {
-                                    $text .= decode_pdf_string($str);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    // Clean up
-    $text = preg_replace('/\s+/', ' ', $text);
-    $text = trim($text);
-    
-    if (strlen($text) < 50) {
-        return ['error' => 'Could not extract readable text from this PDF. The file may be scanned images (OCR needed) or use an unsupported encoding. Please try uploading as DOCX or TXT.'];
-    }
-    
-    return ['text' => $text];
-}
-
-function decode_pdf_string($str) {
-    // Handle PDF string escapes
-    $str = str_replace('\\(', '(', $str);
-    $str = str_replace('\\)', ')', $str);
-    $str = str_replace('\\\\', '\\', $str);
-    $str = str_replace('\\n', "\n", $str);
-    $str = str_replace('\\r', "\r", $str);
-    $str = str_replace('\\t', "\t", $str);
-    return $str;
-}
+// PDF extraction is handled by includes/pdf_extractor.php
+// (loaded on demand by the case 'pdf' branch above)
 
 function extract_from_docx($filepath) {
     // DOCX is a ZIP file containing XML
