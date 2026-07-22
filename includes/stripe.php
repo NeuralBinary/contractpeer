@@ -84,7 +84,8 @@ function create_checkout_session($user, $plan) {
             'trial_period_days' => 14
         ],
         'allow_promotion_codes' => 'true',
-        'automatic_tax' => ['enabled' => true],
+        'customer_update' => ['address' => 'auto'],
+        'automatic_tax' => ['enabled' => 'true'],
     ];
     
     return stripe_request('/checkout/sessions', 'POST', $params);
