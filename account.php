@@ -17,12 +17,21 @@ $user = require_auth();
 <nav class="nav">
     <div class="container nav-inner">
         <a href="/" class="nav-logo">Contract<span>Peer</span></a>
+        <button class="mobile-menu-toggle" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
         <div class="nav-links">
             <a href="/dashboard.php">Dashboard</a>
             <a href="#" data-action="logout">Sign Out</a>
         </div>
     </div>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+    <a href="/dashboard.php">Dashboard</a>
+    <a href="/free-nda-check.php">Free NDA Check</a>
+    <a href="/history.php">History</a>
+    <a href="/pricing.php">Upgrade</a>
+    <a href="/account.php">Account</a>
+    <a href="#" data-action="logout" class="nav-cta">Sign Out</a>
+</div>
 
 <div class="dash-header">
     <div class="container">

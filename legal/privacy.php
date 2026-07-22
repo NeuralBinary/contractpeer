@@ -26,12 +26,21 @@ require_once __DIR__ . '/../includes/config.php';
 <nav class="nav">
     <div class="container nav-inner">
         <a href="/" class="nav-logo">Contract<span>Peer</span></a>
+        <button class="mobile-menu-toggle" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
         <div class="nav-links">
             <a href="/login.php">Sign In</a>
             <a href="/register.php" class="nav-cta">Start Free Trial</a>
         </div>
     </div>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+    <a href="/#features">Features</a>
+    <a href="/free-nda-check.php">Free NDA Check</a>
+    <a href="/pricing.php">Pricing</a>
+    <a href="/blog/">Blog</a>
+    <a href="/login.php">Sign In</a>
+    <a href="/register.php" class="nav-cta">Start Free Trial</a>
+</div>
 
 <div class="legal-doc">
 <h1>Privacy Policy</h1>
