@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /includes/
+Disallow: /storage/
+Disallow: /templates/
+
+Sitemap: https://contractpeer.com/sitemap.xml

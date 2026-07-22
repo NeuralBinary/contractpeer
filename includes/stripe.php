@@ -83,7 +83,7 @@ function create_checkout_session($user, $plan) {
             'metadata' => ['user_id' => $user['id'], 'plan' => $plan],
             'trial_period_days' => 14
         ],
-        'allow_promotion_codes' => true,
+        'allow_promotion_codes' => 'true',
         'automatic_tax' => ['enabled' => true],
     ];
     
