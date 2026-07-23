@@ -72,11 +72,32 @@ function register_user($email, $password, $name = '') {
     $hash = password_hash($password, PASSWORD_DEFAULT);
     $trial_end = date('Y-m-d H:i:s', time() + (14 * 86400)); // 14-day trial
     
-    $stmt = db()->prepare('INSERT INTO users (email, password_hash, name, plan, trial_ends_at) VALUES (?, ?, ?, ?, ?)');
-    $stmt->execute([$email, $hash, $name, 'free', $trial_end]);
+    $stmt = db()->prepare('INSERT INTO users (email, password_hash, name, plan, trial_ends_at, referral_code, referred_by) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    
+    // Generate unique referral code
+    $ref_code = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+    $referred_by = null;
+    
+    // Check for referral cookie
+    start_session();
+    if (isset($_COOKIE['cp_ref'])) {
+        $stmt_check = db()->prepare('SELECT id FROM users WHERE referral_code = ?');
+        $stmt_check->execute([$_COOKIE['cp_ref']]);
+        $referrer = $stmt_check->fetch();
+        if ($referrer) {
+            $referred_by = $referrer['id'];
+        }
+    }
+    
+    $stmt->execute([$email, $hash, $name, 'free', $trial_end, $ref_code, $referred_by]);
     $user_id = db()->lastInsertId();
     
-    start_session();
+    // Record referral relationship
+    if ($referred_by) {
+        $stmt = db()->prepare('INSERT INTO referrals (referrer_user_id, referred_user_id, status) VALUES (?, ?, "pending")');
+        $stmt->execute([$referred_by, $user_id]);
+    }
+    
     $_SESSION['user_id'] = $user_id;
     
     // Send welcome email (async - don't block registration)

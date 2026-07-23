@@ -73,6 +73,33 @@ $is_logged_in = true;
                     <div id="results" class="mt-4"></div>
                 </div>
             </div>
+            
+            <div class="card shadow-sm mt-4">
+                <div class="card-body">
+                    <h3 class="h5">Share & Earn</h3>
+                    <p class="text-muted">Share your referral link. When someone signs up, you get 3 bonus contract analyses.</p>
+                    <?php
+                    $ref_code = $user['referral_code'] ?? '';
+                    if (!$ref_code) {
+                        // Generate one if missing (for existing users)
+                        $ref_code = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+                        $stmt = db()->prepare('UPDATE users SET referral_code = ? WHERE id = ?');
+                        $stmt->execute([$ref_code, $user['id']]);
+                    }
+                    $ref_link = APP_URL . '/r.php?ref=' . $ref_code;
+                    
+                    // Count referrals
+                    $stmt = db()->prepare('SELECT COUNT(*) as c FROM referrals WHERE referrer_user_id = ?');
+                    $stmt->execute([$user['id']]);
+                    $ref_count = $stmt->fetch()['c'];
+                    ?>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($ref_link) ?>" id="refLink" readonly>
+                        <button class="btn btn-cp" onclick="navigator.clipboard.writeText(document.getElementById('refLink').value); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+                    </div>
+                    <p class="small text-muted mb-0">Referrals: <strong><?= $ref_count ?></strong> • Earn 3 bonus analyses per signup</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
