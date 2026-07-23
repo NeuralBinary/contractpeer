@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/config.php';
+
 $result = null;
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['contract_text'])) {
@@ -24,43 +25,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['contract_text'])) {
         }
     }
 }
+
 $page_title = 'Free NDA Risk Check';
 $page_description = 'Paste your NDA or contract and get an instant AI risk analysis for free. See your top 3 risks immediately, no signup required.';
-$extra_head = '<style>.lead-tool{max-width:800px;margin:0 auto;padding:40px 24px;}.lead-tool textarea{width:100%;min-height:250px;padding:16px;border:1px solid #d1d5db;border-radius:12px;font-family:Courier New,monospace;font-size:0.9rem;resize:vertical;}.result-box{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin:24px 0;}.upsell-box{background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:12px;padding:32px;margin:32px 0;text-align:center;color:white;}.upsell-box .btn{background:white;color:#2563eb;font-weight:700;}.blur-preview{filter:blur(4px);pointer-events:none;user-select:none;opacity:0.6;}</style>';
-$extra_head .= '<script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "ContractPeer Free NDA Risk Check",
-        "description": "Free AI-powered contract risk analysis tool. Paste your NDA or contract to get instant risk assessment.",
-        "url": "https://contractpeer.com/free-nda-check.php",
-        "applicationCategory": "LegalApplication",
-        "operatingSystem": "Web",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "ContractPeer",
-            "url": "https://contractpeer.com"
-        }
-    }
-    </script>
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {"@type": "Question", "name": "Is the NDA risk check really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. You can paste your contract and see the top 3 risks immediately without creating an account or providing a credit card."}},
-        {"@type": "Question", "name": "What types of contracts can I check?", "acceptedAnswer": {"@type": "Answer", "text": "Any type: NDAs, master services agreements, employment contracts, vendor agreements, software licenses, and more."}},
-        {"@type": "Question", "name": "Is my contract data secure?", "acceptedAnswer": {"@type": "Answer", "text": "Your contract text is processed for analysis and is not stored permanently. We do not use your data to train AI models."}},
-        {"@type": "Question", "name": "How accurate is the AI analysis?", "acceptedAnswer": {"@type": "Answer", "text": "The AI uses GPT-4o to analyze contracts against established legal risk patterns. It's highly effective but is a decision-support tool, not legal advice."}},
-        {"@type": "Question", "name": "What's the difference between the free check and the full report?", "acceptedAnswer": {"@type": "Answer", "text": "The free check shows top 3 risks. The full report includes all risks, clause references, recommendations, missing clauses, and key terms."}}
-    ]
-}
-</script>';
+$extra_head = '<style>
+.lead-tool{max-width:800px;margin:0 auto;padding:40px 0;}
+.lead-tool textarea{width:100%;min-height:250px;padding:16px;border:1px solid #d1d5db;border-radius:12px;font-family:Courier New,monospace;font-size:0.9rem;resize:vertical;}
+.result-box{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin:24px 0;}
+.upsell-box{background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:12px;padding:32px;margin:32px 0;text-align:center;color:white;}
+.upsell-box .btn{background:white;color:#2563eb;font-weight:700;}
+.upsell-box a{color:white;}
+.blur-preview{filter:blur(4px);pointer-events:none;user-select:none;opacity:0.6;}
+</style>';
+
 require __DIR__ . '/templates/header.php';
 ?>
 <div class="lead-tool">
@@ -68,24 +45,24 @@ require __DIR__ . '/templates/header.php';
     <p class="text-muted mb-4">Paste your non-disclosure agreement or any contract below. Get an instant AI risk analysis — see your top 3 risks immediately. No signup required.</p>
     
     <?php if ($error): ?>
-        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
     <?php if (!$result): ?>
         <form method="POST" action="/free-nda-check.php">
-            <textarea name="contract_text" class="form-control" placeholder="Paste your contract text here..." required></textarea>
+            <textarea name="contract_text" class="form-control" placeholder="Paste your contract text here...&#10;&#10;Example:&#10;MUTUAL NON-DISCLOSURE AGREEMENT&#10;This Agreement is entered into by and between Party A and Party B.&#10;1. CONFIDENTIAL INFORMATION&#10;Each party may disclose confidential information...&#10;2. INDEMNIFICATION&#10;Party A shall indemnify Party B from all claims..." required></textarea>
             <button type="submit" class="btn btn-cp btn-lg w-100 mt-3">Analyze My Contract — Free</button>
         </form>
         <p class="text-center mt-3 small text-muted">🔒 Your text is processed for analysis and not stored. We do not use your data for AI training.</p>
     <?php else: ?>
         <div class="result-box">
             <h2 class="h5">Analysis Complete</h2>
-            <p class="text-muted mb-3"><?php echo htmlspecialchars($result['summary']); ?></p>
+            <p class="text-muted mb-3"><?= htmlspecialchars($result['summary']) ?></p>
             
             <div class="row g-3 mb-3">
                 <div class="col-6">
                     <div class="card text-center p-3 border-danger">
-                        <div class="fs-3 fw-bold text-danger"><?php echo $result['total_risks_found']; ?></div>
+                        <div class="fs-3 fw-bold text-danger"><?= $result['total_risks_found'] ?></div>
                         <div class="small">Total Risks Found</div>
                     </div>
                 </div>
@@ -99,14 +76,14 @@ require __DIR__ . '/templates/header.php';
             
             <?php if ($result['risks']): ?>
                 <h3 class="h6 mt-4 mb-2">Top Risks Identified</h3>
-                <?php foreach ($result['risks'] as $risk): 
+                <?php foreach ($result['risks'] as $risk):
                     $sev = strtolower($risk['severity'] ?? 'low'); ?>
-                    <div class="card mb-2 p-3 <?php echo $sev === 'high' ? 'border-danger bg-danger-subtle' : ($sev === 'medium' ? 'border-warning bg-warning-subtle' : 'border-success bg-success-subtle'); ?>">
+                    <div class="card mb-2 p-3 <?= $sev === 'high' ? 'border-danger bg-danger-subtle' : ($sev === 'medium' ? 'border-warning bg-warning-subtle' : 'border-success bg-success-subtle') ?>">
                         <div class="d-flex justify-content-between align-items-start">
-                            <strong><?php echo htmlspecialchars($risk['category'] ?? 'General'); ?></strong>
-                            <span class="badge <?php echo $sev === 'high' ? 'bg-danger' : ($sev === 'medium' ? 'bg-warning' : 'bg-success'); ?>"><?php echo htmlspecialchars($risk['severity'] ?? 'LOW'); ?></span>
+                            <strong><?= htmlspecialchars($risk['category'] ?? 'General') ?></strong>
+                            <span class="badge <?= $sev === 'high' ? 'bg-danger' : ($sev === 'medium' ? 'bg-warning' : 'bg-success') ?>"><?= htmlspecialchars($risk['severity'] ?? 'LOW') ?></span>
                         </div>
-                        <p class="mb-0 mt-1 small"><?php echo htmlspecialchars($risk['explanation'] ?? ''); ?></p>
+                        <p class="mb-0 mt-1 small"><?= htmlspecialchars($risk['explanation'] ?? '') ?></p>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -114,7 +91,7 @@ require __DIR__ . '/templates/header.php';
             <?php if ($result['hidden_count'] > 0): ?>
                 <div style="position:relative;">
                     <div class="blur-preview mt-3">
-                        <h3 class="h6">+ <?php echo $result['hidden_count']; ?> More Risks Detected</h3>
+                        <h3 class="h6">+ <?= $result['hidden_count'] ?> More Risks Detected</h3>
                         <div class="card p-3 mb-2"><p class="mb-0 text-muted">Additional risks identified in categories including limitation of liability, assignment, amendment, and more...</p></div>
                     </div>
                 </div>
@@ -122,7 +99,7 @@ require __DIR__ . '/templates/header.php';
             
             <div class="upsell-box">
                 <h3 class="h4 text-white">Unlock Your Full Risk Report</h3>
-                <p>Get all <?php echo $result['total_risks_found']; ?> risks with clause references, severity ratings, explanations, recommended actions, missing clauses, and key terms.</p>
+                <p>Get all <?= $result['total_risks_found'] ?> risks with clause references, severity ratings, explanations, recommended actions, missing clauses, and key terms.</p>
                 <a href="/register.php" class="btn btn-lg">Get Full Report — Free Trial</a>
                 <p class="small mt-2 mb-0" style="opacity:0.8">14-day free trial · 3 free contracts · No credit card</p>
             </div>
@@ -131,7 +108,7 @@ require __DIR__ . '/templates/header.php';
     <?php endif; ?>
 </div>
 
-<div class="container" style="max-width:760px;padding:40px 24px;">
+<div class="container" style="max-width:760px;padding:40px 0;">
     <h2 class="h4 mb-3">Frequently Asked Questions</h2>
     <div class="accordion" id="faqAccordion">
         <div class="accordion-item">
@@ -160,4 +137,5 @@ require __DIR__ . '/templates/header.php';
         </div>
     </div>
 </div>
+
 <?php require __DIR__ . '/templates/footer.php'; ?>
