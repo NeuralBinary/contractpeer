@@ -1,61 +1,28 @@
 <?php
-/**
- * ContractPeer - Analysis History
- */
 require_once __DIR__ . '/includes/config.php';
 $user = require_auth();
+$page_title = 'History';
+require __DIR__ . '/templates/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>History — ContractPeer</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body>
-<nav class="nav">
-    <div class="container nav-inner">
-        <a href="/" class="nav-logo">Contract<span>Peer</span></a>
-        <button class="mobile-menu-toggle" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
-        <div class="nav-links">
-            <a href="/dashboard.php">Dashboard</a>
-            <a href="#" data-action="logout">Sign Out</a>
-        </div>
-    </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-    <a href="/dashboard.php">Dashboard</a>
-    <a href="/free-nda-check.php">Free NDA Check</a>
-    <a href="/history.php">History</a>
-    <a href="/pricing.php">Upgrade</a>
-    <a href="/account.php">Account</a>
-    <a href="#" data-action="logout" class="nav-cta">Sign Out</a>
+<div class="bg-light py-4 border-bottom">
+    <div class="container"><h1 class="h4 mb-0">Analysis History</h1></div>
 </div>
-
-<div class="dash-header">
-    <div class="container">
-        <h1>Analysis History</h1>
-    </div>
-</div>
-
-<div class="container">
-    <div class="dash-layout">
-        <div class="dash-sidebar">
-            <a href="/dashboard.php">New Analysis</a>
-            <a href="/history.php" class="active">History</a>
-            <a href="/pricing.php">Upgrade Plan</a>
-            <a href="/account.php">Account & Data</a>
-            <a href="#" data-action="logout">Sign Out</a>
-        </div>
-        <div class="dash-main">
-            <div id="history-list">
-                <div class="loading"><div class="spinner"></div><p>Loading...</p></div>
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="list-group">
+                <a href="/dashboard.php" class="list-group-item list-group-item-action">New Analysis</a>
+                <a href="/history.php" class="list-group-item list-group-item-action active">History</a>
+                <a href="/pricing.php" class="list-group-item list-group-item-action">Upgrade Plan</a>
+                <a href="/account.php" class="list-group-item list-group-item-action">Account & Data</a>
+                <a href="#" class="list-group-item list-group-item-action" data-action="logout">Sign Out</a>
             </div>
         </div>
+        <div class="col-lg-9">
+            <div class="card shadow-sm"><div class="card-body">
+                <div id="history-list"><div class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2 text-muted">Loading...</p></div></div>
+            </div></div>
+        </div>
     </div>
 </div>
-
-<script src="/assets/js/app.js"></script>
-</body>
-</html>
+<?php require __DIR__ . '/templates/footer.php'; ?>

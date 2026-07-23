@@ -1,104 +1,68 @@
 <?php
-/**
- * ContractPeer - Account & Data Management (GDPR/CCPA)
- */
 require_once __DIR__ . '/includes/config.php';
 $user = require_auth();
+$page_title = 'Account & Data';
+require __DIR__ . '/templates/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account & Data — ContractPeer</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body>
-<nav class="nav">
-    <div class="container nav-inner">
-        <a href="/" class="nav-logo">Contract<span>Peer</span></a>
-        <button class="mobile-menu-toggle" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
-        <div class="nav-links">
-            <a href="/dashboard.php">Dashboard</a>
-            <a href="#" data-action="logout">Sign Out</a>
-        </div>
-    </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-    <a href="/dashboard.php">Dashboard</a>
-    <a href="/free-nda-check.php">Free NDA Check</a>
-    <a href="/history.php">History</a>
-    <a href="/pricing.php">Upgrade</a>
-    <a href="/account.php">Account</a>
-    <a href="#" data-action="logout" class="nav-cta">Sign Out</a>
+<div class="bg-light py-4 border-bottom">
+    <div class="container"><h1 class="h4 mb-0">Account & Data Management</h1></div>
 </div>
-
-<div class="dash-header">
-    <div class="container">
-        <h1>Account & Data Management</h1>
-    </div>
-</div>
-
-<div class="container">
-    <div class="dash-layout">
-        <div class="dash-sidebar">
-            <a href="/dashboard.php">New Analysis</a>
-            <a href="/history.php">History</a>
-            <a href="/pricing.php">Upgrade Plan</a>
-            <a href="/account.php" class="active">Account & Data</a>
-            <a href="#" data-action="logout">Sign Out</a>
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="list-group">
+                <a href="/dashboard.php" class="list-group-item list-group-item-action">New Analysis</a>
+                <a href="/history.php" class="list-group-item list-group-item-action">History</a>
+                <a href="/pricing.php" class="list-group-item list-group-item-action">Upgrade Plan</a>
+                <a href="/account.php" class="list-group-item list-group-item-action active">Account & Data</a>
+                <a href="#" class="list-group-item list-group-item-action" data-action="logout">Sign Out</a>
+            </div>
         </div>
-        <div class="dash-main">
-            <h3>Your Data Rights</h3>
-            <p style="color: var(--gray-500); margin-bottom: 24px;">
-                Under GDPR (EU/UK) and CCPA (California), you have the right to access and delete your personal data.
-                Use the options below to export or delete your data.
-            </p>
+        <div class="col-lg-9">
+            <div class="card shadow-sm"><div class="card-body">
+                <h3 class="h5">Your Data Rights</h3>
+                <p class="text-muted">Under GDPR (EU/UK) and CCPA (California), you have the right to access and delete your personal data.</p>
 
-            <div class="risk-card low" style="margin-bottom: 16px;">
-                <h4>Export Your Data</h4>
-                <p>Download a copy of all your account data, including analysis history and payment records.</p>
-                <button class="btn btn-secondary" style="margin-top: 12px;" onclick="exportData()">Export My Data</button>
-            </div>
+                <div class="card border-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Export Your Data</h5>
+                        <p class="card-text">Download a copy of all your account data, analysis history, and payment records.</p>
+                        <button class="btn btn-outline-primary" onclick="exportData()">Export My Data</button>
+                    </div>
+                </div>
 
-            <div class="risk-card high">
-                <h4>Delete Your Account</h4>
-                <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
-                <button class="btn btn-primary" style="margin-top: 12px; background: var(--danger);" onclick="deleteAccount()">Delete My Account</button>
-            </div>
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">Delete Your Account</h5>
+                        <p class="card-text">Permanently delete your account and all associated data. This cannot be undone.</p>
+                        <button class="btn btn-danger" onclick="deleteAccount()">Delete My Account</button>
+                    </div>
+                </div>
 
-            <div style="margin-top: 32px;">
-                <h4>Account Information</h4>
+                <hr class="my-4">
+                <h4 class="h6">Account Information</h4>
                 <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?></p>
                 <p><strong>Plan:</strong> <?= ucfirst($user['plan']) ?></p>
                 <p><strong>Member since:</strong> <?= date('M j, Y', strtotime($user['created_at'])) ?></p>
-            </div>
+            </div></div>
         </div>
     </div>
 </div>
-
 <script>
 async function exportData() {
-    if (!confirm('Export all your data? This will generate a download.')) return;
-    const result = await fetch('/api/dsr.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({request_type: 'access'}) });
-    const data = await result.json();
-    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'contractpeer-data-export.json'; a.click();
-    URL.revokeObjectURL(url);
+    if (!confirm('Export all your data?')) return;
+    const r = await fetch('/api/dsr.php', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({request_type:'access'})});
+    const d = await r.json();
+    const blob = new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='contractpeer-data-export.json'; a.click();
 }
-
 async function deleteAccount() {
-    if (!confirm('Are you absolutely sure? This will permanently delete your account and all data. This cannot be undone.')) return;
-    if (!confirm('Last confirmation: Type DELETE in the next prompt to proceed.')) return;
-    const text = prompt('Type DELETE to confirm:');
-    if (text !== 'DELETE') { alert('Deletion cancelled.'); return; }
-    const result = await fetch('/api/dsr.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({request_type: 'delete'}) });
-    const data = await result.json();
-    if (data.success) { alert('Your account has been deleted.'); window.location.href = '/'; }
-    else { alert('Error: ' + (data.error || 'Unknown error')); }
+    if (!confirm('Permanently delete your account? This cannot be undone.')) return;
+    if (prompt('Type DELETE to confirm:') !== 'DELETE') { alert('Cancelled.'); return; }
+    const r = await fetch('/api/dsr.php', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({request_type:'delete'})});
+    const d = await r.json();
+    if (d.success) { alert('Account deleted.'); location.href='/'; }
+    else { alert('Error: '+(d.error||'Unknown')); }
 }
 </script>
-</body>
-</html>
+<?php require __DIR__ . '/templates/footer.php'; ?>
