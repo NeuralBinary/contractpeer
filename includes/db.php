@@ -32,9 +32,15 @@ function init_db() {
         contracts_used INTEGER DEFAULT 0,
         contracts_limit INTEGER DEFAULT 3,
         trial_ends_at TEXT,
+        referral_code TEXT UNIQUE,
+        referred_by TEXT,
         created_at TEXT DEFAULT (datetime('now')),
         updated_at TEXT DEFAULT (datetime('now'))
     )");
+
+    // Add referral_code column if it doesn't exist (for existing DBs)
+    try { $db->exec("ALTER TABLE users ADD COLUMN referral_code TEXT"); } catch(Exception $e) {}
+    try { $db->exec("ALTER TABLE users ADD COLUMN referred_by TEXT"); } catch(Exception $e) {}
 
     $db->exec("CREATE TABLE IF NOT EXISTS analyses (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
