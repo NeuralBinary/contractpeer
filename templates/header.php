@@ -3,6 +3,7 @@
  * ContractPeer - Shared Header Template
  * All pages include this for consistent navigation and styling.
  */
+require_once __DIR__ . '/../includes/config.php';
 $is_logged_in = isset($is_logged_in) ? $is_logged_in : (current_user() !== null);
 $user = $is_logged_in ? current_user() : null;
 $current_page = basename($_SERVER['PHP_SELF'] ?? '');
