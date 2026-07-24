@@ -110,6 +110,16 @@ function init_db() {
         FOREIGN KEY (referrer_user_id) REFERENCES users(id),
         FOREIGN KEY (referred_user_id) REFERENCES users(id)
     )");
+
+    $db->exec("CREATE TABLE IF NOT EXISTS page_views (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        page TEXT,
+        referrer TEXT,
+        user_agent TEXT,
+        ip_hash TEXT,
+        session_id TEXT,
+        created_at TEXT DEFAULT (datetime('now'))
+    )");
 }
 
 function json_response($data, $code = 200) {

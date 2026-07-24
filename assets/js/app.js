@@ -259,7 +259,7 @@ async function loadAnalysisDetail() {
     if (result.error) { div.innerHTML = `<div class="risk-card high"><p>${result.error}</p></div>`; return; }
 
     const a = result.analysis;
-    const analysis = JSON.parse(a.analysis_result || '{}');
+    const analysis = a.analysis_result || {};
     displayAnalysis({
         analysis: analysis,
         risks_summary: {
