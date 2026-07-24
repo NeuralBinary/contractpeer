@@ -9,6 +9,17 @@ require __DIR__ . '/../templates/header.php';
     
     <div class="card mb-3 shadow-sm">
         <div class="row g-0">
+            <div class="col-md-3"><img src="/assets/img/blog-web-vs-word.png" class="img-fluid rounded-start h-100" style="object-fit:cover;" alt="Web vs Word Contract Review"></div>
+            <div class="col-md-9"><div class="card-body">
+                <h5 class="card-title"><a href="/blog/web-vs-word-contract-review.php" class="text-decoration-none text-dark">Contract Review Software: Web-Based vs Microsoft Word Plugins</a></h5>
+                <p class="card-text text-muted">Compare web-based vs Word-plugin contract review tools for solo and small-firm attorneys. Which saves more time, costs less, and fits your workflow better?</p>
+                <p class="card-text"><small class="text-muted">July 2026 · 9 min read</small></p>
+            </div></div>
+        </div>
+    </div>
+
+    <div class="card mb-3 shadow-sm">
+        <div class="row g-0">
             <div class="col-md-3"><img src="/assets/img/blog-contractor-review.png" class="img-fluid rounded-start h-100" style="object-fit:cover;" alt="Contractor Agreement"></div>
             <div class="col-md-9"><div class="card-body">
                 <h5 class="card-title"><a href="/blog/contractor-agreement-review.php" class="text-decoration-none text-dark">Independent Contractor Agreement Review: What Every Small Firm Needs to Know</a></h5>
