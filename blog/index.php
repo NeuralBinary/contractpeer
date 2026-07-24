@@ -9,6 +9,17 @@ require __DIR__ . '/../templates/header.php';
     
     <div class="card mb-3 shadow-sm">
         <div class="row g-0">
+            <div class="col-md-3"><img src="/assets/img/blog-contractor-review.png" class="img-fluid rounded-start h-100" style="object-fit:cover;" alt="Contractor Agreement"></div>
+            <div class="col-md-9"><div class="card-body">
+                <h5 class="card-title"><a href="/blog/contractor-agreement-review.php" class="text-decoration-none text-dark">Independent Contractor Agreement Review: What Every Small Firm Needs to Know</a></h5>
+                <p class="card-text text-muted">Complete guide to reviewing independent contractor agreements. 8 critical clauses to check, common red flags, and how AI contract review helps small firms work faster.</p>
+                <p class="card-text"><small class="text-muted">July 2026 · 9 min read</small></p>
+            </div></div>
+        </div>
+    </div>
+
+    <div class="card mb-3 shadow-sm">
+        <div class="row g-0">
             <div class="col-md-3"><img src="/assets/img/blog-ai-review.png" class="img-fluid rounded-start h-100" style="object-fit:cover;" alt="AI Contract Review"></div>
             <div class="col-md-9"><div class="card-body">
                 <h5 class="card-title"><a href="/blog/ai-contract-review-guide.php" class="text-decoration-none text-dark">AI Contract Review: What Attorneys Need to Know</a></h5>
